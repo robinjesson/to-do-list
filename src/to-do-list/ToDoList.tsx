@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { timer } from 'rxjs';
 import ToDoForm from '../to-do-form/ToDoForm';
 import ToDo from '../to-do/ToDo';
 import { TToDo } from '../utils/types';
@@ -9,29 +8,19 @@ const ToDoList: React.FC<{}> = () => {
 
     const [toDoList, setToDoList] = useState<TToDo[]>([]);
     const [doneList, setDoneList] = useState<TToDo[]>([]);
-    const [showError, setShowError] = useState<boolean>(false);
-    const [messageError, setMessageError] = useState<string>('');
 
-    const doAdd: (label: string) => boolean = (label: string) => {
+    const doAdd: (label: string) => string | undefined = (label: string) => {
 
         if(label === '') {
-            showErrorDiv('L\'élément est vide.');
-            return false;
+            return 'L\'élément est vide.';
         }
         else if(toDoList.some(todo => todo.label === label)) {
-            showErrorDiv('L\'élément à ajouter existe déjà.');
-            return false;
+            return 'L\'élément à ajouter existe déjà.';
         }
         else {
             setToDoList(prev => prev = prev.concat([{label: label, checked: false, onDelete: doDelete, onDone: doDone, creation: new Date()}]));
-            return true;
+            return undefined;
         }
-    }
-
-    const showErrorDiv: (message: string) => void = (message: string) => {
-        setMessageError(prev => prev = message);
-        setShowError(prev => prev = true);
-        timer(5000).subscribe(() => setShowError(prev => prev = false));
     }
 
     const doDelete: (label: string) => void = (label: string) => {
@@ -67,16 +56,13 @@ const ToDoList: React.FC<{}> = () => {
     return (
         <React.Fragment>
             <ToDoForm onAdd={doAdd}></ToDoForm>
-            {showError && messageError !== '' && <div>
-                {messageError}
-            </div>}
             <h1>A faire  <span className="badge bg-secondary">{toDoList.length}</span></h1>
             <div className="list-group">
                 {toDoList.map(elt => (
                     <ToDo key={elt.label} label={elt.label} checked={elt.checked} onDelete={doDelete} onDone={doDone} creation={elt.creation}></ToDo>
                 ))}
             </div>
-            <h1>Fait <span className="badge bg-secondary">{doneList.length}</span></h1>
+            <h1 className="mt-3">Fait <span className="badge bg-secondary">{doneList.length}</span></h1>
             <div className="list-group">
                 {doneList.map(elt => (
                     <ToDo key={elt.label} label={elt.label} checked={elt.checked} onDelete={doDelete} onDone={doDone} creation={elt.creation}></ToDo>
