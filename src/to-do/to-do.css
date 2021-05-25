@@ -1,21 +1,21 @@
-
-.todo > * {
-    display: inline;
-    cursor: pointer;
-}
-
-.todo {
-    padding: 10px;
-    border-radius: 5px;
-    margin: 2px;
-}
-
-.todo:hover {
-    background-color: gainsboro;
-}
-
-.barre {
+.done {
     text-decoration: line-through;
 }
+
+.label {
+    flex: auto;
+}
+
+.del {
+    border-radius: 5px;
+    margin-left: 5px;
+    border-left: 0;
+}
+
+.del:hover {
+    color: red
+} 
+
+
 
   

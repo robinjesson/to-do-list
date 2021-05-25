@@ -13,14 +13,19 @@ const ToDo: React.FC<TToDo> = (props) => {
     }
 
     const doDone: () => void = () => {
-        setDone(prev => prev = !prev)
+        setDone(prev => prev = !done)
         props.onDone(props.label, done)
     }
 
-    return <div onClick={() => doDone()} className="todo">
-            <p className={`${done ? 'barre' : ''}`}>{props.label}</p>
-            <span onClick={() => doDelete()} uk-icon="icon: trash"></span>
-        </div>
+    return <div className="d-flex list-group-item">
+        <span onClick={() => doDone()} className={`${done ? 'done' : ''} label`}>
+            {props.label}
+        </span>
+        <span onClick={() => doDelete()} className="del">
+            <i className="fas fa-trash"></i>
+        </span>
+    </div>
+        
 }
 
 export default ToDo;

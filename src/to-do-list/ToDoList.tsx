@@ -3,12 +3,12 @@ import { timer } from 'rxjs';
 import ToDoForm from '../to-do-form/ToDoForm';
 import ToDo from '../to-do/ToDo';
 import { TToDo } from '../utils/types';
-
-
+import './ToDoList.css';
 
 const ToDoList: React.FC<{}> = () => {
 
     const [toDoList, setToDoList] = useState<TToDo[]>([]);
+    const [doneList, setDoneList] = useState<TToDo[]>([]);
     const [showError, setShowError] = useState<boolean>(false);
     const [messageError, setMessageError] = useState<string>('');
 
@@ -38,22 +38,50 @@ const ToDoList: React.FC<{}> = () => {
         setToDoList(prev => prev = prev.filter(todo => todo.label !== label));
     }
 
-    const doDone: (label: string) => void = (label: string, checked = true) => {
-        const idx: number = toDoList.findIndex(todo => todo.label === label);
-        let copy: TToDo[] = [...toDoList];
-        copy[idx].checked = checked;
-        setToDoList(prev => prev = copy);
+    const doDone: (label: string, checked: boolean) => void = (label: string, checked: boolean) => {
+        let copyToDoList: TToDo[] = [...toDoList];
+        let copyDoneList: TToDo[] = [...doneList];
+        if(!checked) {
+            const idx: number = copyToDoList.findIndex(todo => todo.label === label);
+            let todo: TToDo = copyToDoList[idx];
+            setToDoList(prev => prev = copyToDoList.filter(elt => elt.label !== todo.label));
+            todo.checked = true;
+            copyDoneList.push(todo);
+            setDoneList(prev => prev = copyDoneList);
+        }
+        else {
+            const idx: number = copyDoneList.findIndex(todo => todo.label === label);
+            let todo: TToDo = copyDoneList[idx];
+            setDoneList(prev => prev = copyDoneList.filter(elt => elt.label !== todo.label));
+            todo.checked = false;
+            copyToDoList.push(todo);
+            setToDoList(prev => prev = copyToDoList);
+        }
+
+        
+            
+            
+        
     } 
 
     return (
         <React.Fragment>
-            {toDoList.map(elt => (
-                <ToDo key={elt.label} label={elt.label} checked={elt.checked} onDelete={doDelete} onDone={doDone} creation={elt.creation}></ToDo>
-            ))}
             <ToDoForm onAdd={doAdd}></ToDoForm>
             {showError && messageError !== '' && <div>
                 {messageError}
             </div>}
+            <h1>A faire  <span className="badge bg-secondary">{toDoList.length}</span></h1>
+            <div className="list-group">
+                {toDoList.map(elt => (
+                    <ToDo key={elt.label} label={elt.label} checked={elt.checked} onDelete={doDelete} onDone={doDone} creation={elt.creation}></ToDo>
+                ))}
+            </div>
+            <h1>Fait <span className="badge bg-secondary">{doneList.length}</span></h1>
+            <div className="list-group">
+                {doneList.map(elt => (
+                    <ToDo key={elt.label} label={elt.label} checked={elt.checked} onDelete={doDelete} onDone={doDone} creation={elt.creation}></ToDo>
+                ))}
+            </div>
         </React.Fragment>
         
     )
