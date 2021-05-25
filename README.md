@@ -1,1 +1,1 @@
-Projet pour apprendre apprendre et tester React.
+Projet pour apprendre et tester React.
