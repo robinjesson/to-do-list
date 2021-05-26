@@ -10,24 +10,22 @@ const ToDoForm: React.FC<{onAdd: (label: string) => string | undefined}> = (prop
 
     const doAdd: (event: SyntheticEvent) => void = (event: SyntheticEvent) => {
         event.preventDefault();
+        addToDo();    
+    }
+
+    const onEnter: (event: any) => void = (event: any) => {
+        if(event.key === 'Enter'){
+            addToDo();
+        }
+    }
+
+    const addToDo: () => void = () => {
         if(toDoCtrl.current) {
             const message: string | undefined = props.onAdd(toDoCtrl.current.value);
             if(!message) 
                 toDoCtrl.current.value = '';
             else
                 showErrorDiv(message);
-        }    
-    }
-
-    const onEnter = (event: any) => {
-        if(event.key === 'Enter'){
-            if(toDoCtrl.current) {
-                const message: string | undefined = props.onAdd(toDoCtrl.current.value);
-                if(!message) 
-                    toDoCtrl.current.value = '';
-                else
-                    showErrorDiv(message);
-            }
         }
     }
 
@@ -38,7 +36,7 @@ const ToDoForm: React.FC<{onAdd: (label: string) => string | undefined}> = (prop
     }
 
     return (
-        <div className="input-group my-3 has-validation">
+        <div className="input-group has-validation">
             <input type="text" className={(showError && messageError ? 'is-invalid' : '') + " form-control"} aria-describedby="button-addon2" ref={toDoCtrl} onKeyPress={onEnter}/>
             <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={doAdd}>
                 <i className="fas fa-plus"></i>

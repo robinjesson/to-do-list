@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
-import { TToDo } from '../utils/types';
+import { InputToDo } from '../utils/input.types';
 import './to-do.css';
 
+const ToDo: React.FC<InputToDo> = (props) => {
 
-
-const ToDo: React.FC<TToDo> = (props) => {
-
-    const [done, setDone] = useState<boolean>(props.checked);
+    const [done, setDone] = useState<boolean>(props.todo.checked);
 
     const doDelete: () => void = () => {
-        props.onDelete(props.label);
+        props.onDelete(props.todo.label);
     }
 
     const doDone: () => void = () => {
         setDone(prev => prev = !done)
-        props.onDone(props.label, done)
+        props.onDone(props.todo.label, done)
     }
 
     return <div className="d-flex list-group-item">
         <span onClick={() => doDone()} className={`${done ? 'done' : ''} label`}>
-            {props.label}
+            {props.todo.label}
         </span>
         <span onClick={() => doDelete()} className="del">
             <i className="fas fa-trash"></i>
