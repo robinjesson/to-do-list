@@ -107,7 +107,7 @@ const ToDoList: React.FC<{}> = () => {
               className="accordion-collapse collapse"
               aria-labelledby="headingOne"
               data-bs-parent="#accordionExample"
-            >
+            > 
               <div className="accordion-body">
                 <div className="list-group">
                   {toDoList.map((elt) => (
